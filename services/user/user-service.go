@@ -49,3 +49,15 @@ func AddUser(db *sql.DB) error {
 
     return nil
 }
+
+func GetUserID(db *sql.DB, username string) (int64, error) {
+	var userID int64
+
+	err := db.QueryRow("SELECT id FROM users WHERE username = ?", username).Scan(&userID)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+
+	return userID, nil
+}
