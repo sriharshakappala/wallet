@@ -11,21 +11,21 @@ import (
 )
 
 func openDB() (*sql.DB, error) {
-    db, err := sql.Open("mysql", "admin:password@tcp(localhost:3306)/wallet")
-    if err != nil {
-        return nil, err
-    }
-    return db, nil
+	db, err := sql.Open("mysql", "admin:password@tcp(localhost:3306)/wallet")
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
 
 func main() {
 
 	db, err := openDB()
-    if err != nil {
-        fmt.Println("Error opening database:", err)
-        return
-    }
-    defer db.Close()
+	if err != nil {
+		fmt.Println("Error opening database:", err)
+		return
+	}
+	defer db.Close()
 
 	var choice int
 
@@ -49,7 +49,7 @@ func main() {
 		case 3:
 			transactionService.CreateTransaction(db)
 		case 4:
-			fmt.Println("Exiting the program.")
+			fmt.Println("TBI")
 		case 5:
 			statementService.ViewTransactions(db)
 		case 6:
