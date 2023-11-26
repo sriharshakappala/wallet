@@ -6,6 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Adds a user and initializes their wallet with the given balance
 func AddUser(db *sql.DB) error {
 	var username string
 	var balance float64

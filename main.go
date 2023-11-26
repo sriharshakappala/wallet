@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	userService "example.com/wallet/services/user"
+	statementService "example.com/wallet/services/statement"
 )
 
 func openDB() (*sql.DB, error) {
@@ -43,7 +44,7 @@ func main() {
 		case 1:
 			userService.AddUser(db)
 		case 2:
-			fmt.Println("Exiting the program2.")
+			statementService.ViewBalances(db)
 		case 3:
 			fmt.Println("Exiting the program3.")
 		case 4:
