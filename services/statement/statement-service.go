@@ -31,3 +31,35 @@ func ViewBalances(db *sql.DB) error {
 
 	return nil
 }
+
+// View transactions of the user by scanning the username
+// Fetch latest 20 transactions order by txn_date
+func ViewTransactions(db *sql.DB) error {
+	var username string
+	fmt.Print("Enter username: ")
+	fmt.Scan(&username)
+
+	rows, err := db.Query("SELECT t.txn_type, t.txn_date, t.txn_amount, t.closing_balance FROM transactions t INNER JOIN users u ON t.user_id = u.id WHERE u.username = ? ORDER BY t.txn_date DESC LIMIT 20", username)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("Showing the latest 20 transactions:")
+
+	for rows.Next() {
+		var txn_type string
+		var txn_date string
+		var txn_amount float64
+		var closing_balance float64
+		err = rows.Scan(&txn_type, &txn_date, &txn_amount, &closing_balance)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+		fmt.Printf("%s | %s | %.2f | %.2f\n", txn_type, txn_date, txn_amount, closing_balance)
+	}
+
+	return nil
+}

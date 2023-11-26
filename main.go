@@ -51,7 +51,7 @@ func main() {
 		case 4:
 			fmt.Println("Exiting the program.")
 		case 5:
-			fmt.Println("Exiting the program.")
+			statementService.ViewTransactions(db)
 		case 6:
 			fmt.Println("Exiting the program.")
 			os.Exit(0)
