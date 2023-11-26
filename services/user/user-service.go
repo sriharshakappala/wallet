@@ -1,9 +1,9 @@
 package user
 
 import (
-    "fmt"
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+  "fmt"
+  "database/sql"
+  _ "github.com/go-sql-driver/mysql"
 )
 
 // Adds a user and initializes their wallet with the given balance
