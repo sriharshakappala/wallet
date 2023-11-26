@@ -92,6 +92,20 @@ func transferAmount(db *sql.DB, fromUserID int64, toUserID int64, amount float64
 		return err
 	}
 
+	_, err = tx.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance) VALUES (?, ?, ?, ?)", fromUserID, "Debit", amount, fromUserBalance - amount)
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance) VALUES (?, ?, ?, ?)", toUserID, "Credit", amount, toUserBalance + amount)
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		fmt.Println(err)
