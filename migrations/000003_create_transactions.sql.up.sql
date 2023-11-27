@@ -1,7 +1,7 @@
 CREATE TABLE transactions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
-  txn_type VARCHAR(10) NOT NULL,
+  txn_type VARCHAR(20) NOT NULL,
   txn_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   txn_amount DECIMAL(10, 2),
   closing_balance DECIMAL(10, 2),
