@@ -20,8 +20,8 @@ func AddUser(db *sql.DB) error {
 	userCreateStmt, err := db.Prepare("INSERT INTO users (username) VALUES (?)")
 	if err != nil {
 		fmt.Println(err)
-			return err
-    }
+		return err
+	}
 	defer userCreateStmt.Close()
 
 	result, err := userCreateStmt.Exec(username)
