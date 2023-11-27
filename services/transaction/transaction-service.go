@@ -35,9 +35,6 @@ func CreateTransaction(db *sql.DB) error {
 		return err
 	}
 
-	fmt.Println(fromUserID)
-	fmt.Println(toUserID)
-
 	err = transferAmount(db, fromUserID, toUserID, amount)
 	if err != nil {
 		fmt.Println(err)
