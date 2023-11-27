@@ -8,6 +8,8 @@ This app uses MYSQL for database. For convenience a docker-compose.yml file has 
 2. Run `docker-compose up`
 3. Once the MYSQL image is pulled and container is started execute this command `migrate -path ./migrations -database "mysql://admin:password@tcp(localhost:3306)/wallet" up`. This will run the migrations and creates the schema & seeds with initial data.
 
+<img width="806" alt="Screenshot 2023-11-27 at 8 55 21 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/086f6b6a-081c-4028-9b2e-651e1886e5f1">
+
 ***
 
 #### Stack
@@ -59,5 +61,16 @@ Ref: users.id < transactions.user_id
 Ref: users.id < transactions.other_party_id
 ```
 
+#### Execution
 
+##### User creation
 
+<img width="409" alt="Screenshot 2023-11-27 at 8 56 51 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/85b07df6-ba91-4adc-85a8-366811e1ae59">
+
+<img width="448" alt="Screenshot 2023-11-27 at 8 57 51 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/fd04aca0-1ee1-4bdd-b2db-ed94922b7033">
+
+<img width="490" alt="Screenshot 2023-11-27 at 8 57 56 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/9c84b7f6-c1be-4e1d-8de3-0999ad68eadd">
+
+##### View Balances
+
+<img width="431" alt="Screenshot 2023-11-27 at 8 59 50 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/486b37d9-01f5-43cc-a7a3-72feac82a433">
