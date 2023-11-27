@@ -131,12 +131,12 @@ func CreateRefund(db *sql.DB) error {
 }
 
 // Function creates reversal entries for the given transaction id
-func refundTransaction(db *sql.DB, transactionId int64) {
+func refundTransaction(db *sql.DB, transactionId int64) error {
 	tx, err := db.Begin()
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
 	}
 
 	var txnType string
@@ -144,51 +144,69 @@ func refundTransaction(db *sql.DB, transactionId int64) {
 	var closingBalance float64
 	var otherPartyId int64
 	var userId int64
+	var userBalance float64
+	var otherPartyBalance float64
 	err = tx.QueryRow("SELECT txn_type, txn_amount, closing_balance, other_party_id, user_id FROM transactions WHERE id = ?", transactionId).Scan(&txnType, &txnAmount, &closingBalance, &otherPartyId, &userId)
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
 	}
 
 	if txnType == "Credit" || txnType == "Credit Reversal" || txnType == "Debit Reversal" {
 		fmt.Println("Cannot refund a credit transaction")
 		tx.Rollback()
-		return
+		return nil
 	}
 
-	_, err = tx.Exec("UPDATE wallet SET balance = ? WHERE user_id = ?", closingBalance + txnAmount, userId)
+	err = tx.QueryRow("SELECT balance FROM wallet WHERE user_id = ?", userId).Scan(&userBalance)
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
 	}
 
-	_, err = tx.Exec("UPDATE wallet SET balance = ? WHERE user_id = ?", closingBalance - txnAmount, otherPartyId)
+	err = tx.QueryRow("SELECT balance FROM wallet WHERE user_id = ?", otherPartyId).Scan(&otherPartyBalance)
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
 	}
 
-	_, err = tx.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance, other_party_id) VALUES (?, ?, ?, ?, ?)", userId, "Debit Reversal", txnAmount, closingBalance + txnAmount, otherPartyId)
+	_, err = tx.Exec("UPDATE wallet SET balance = ? WHERE user_id = ?", userBalance + txnAmount, userId)
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
 	}
 
-	_, err = tx.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance, other_party_id) VALUES (?, ?, ?, ?, ?)", otherPartyId, "Credit Reversal", txnAmount, closingBalance - txnAmount, userId)
+	_, err = tx.Exec("UPDATE wallet SET balance = ? WHERE user_id = ?", otherPartyBalance - txnAmount, otherPartyId)
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
+	}
+
+	_, err = tx.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance, other_party_id) VALUES (?, ?, ?, ?, ?)", userId, "Debit Reversal", txnAmount, userBalance + txnAmount, otherPartyId)
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance, other_party_id) VALUES (?, ?, ?, ?, ?)", otherPartyId, "Credit Reversal", txnAmount, otherPartyBalance - txnAmount, userId)
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+		return err
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		fmt.Println(err)
 		tx.Rollback()
-		return
+		return err
 	}
+
+	return nil
 }
