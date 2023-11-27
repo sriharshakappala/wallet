@@ -92,3 +92,7 @@ Ref: users.id < transactions.other_party_id
 <img width="531" alt="Screenshot 2023-11-27 at 10 01 25 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/8c3ca38d-3ebe-4bae-9d6f-f80803130cd3">
 
 ##### View Statement
+
+<img width="408" alt="Screenshot 2023-11-27 at 10 28 41 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/f2ce32e9-59ab-403f-b0bd-9afeaae09327">
+
+<img width="358" alt="Screenshot 2023-11-27 at 10 28 51 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/8acc0230-2a4c-486c-bbdb-3ea4d47d686d">
