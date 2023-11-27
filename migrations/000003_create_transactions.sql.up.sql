@@ -5,7 +5,9 @@ CREATE TABLE transactions (
   txn_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   txn_amount DECIMAL(10, 2),
   closing_balance DECIMAL(10, 2),
+  other_party_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (other_party_id) REFERENCES users(id)
 );

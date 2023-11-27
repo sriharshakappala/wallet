@@ -49,7 +49,7 @@ func main() {
 		case 3:
 			transactionService.CreateTransaction(db)
 		case 4:
-			fmt.Println("TBI")
+			transactionService.CreateRefund(db)
 		case 5:
 			statementService.ViewTransactions(db)
 		case 6:
