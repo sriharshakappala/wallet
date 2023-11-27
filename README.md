@@ -74,3 +74,15 @@ Ref: users.id < transactions.other_party_id
 ##### View Balances
 
 <img width="431" alt="Screenshot 2023-11-27 at 8 59 50 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/486b37d9-01f5-43cc-a7a3-72feac82a433">
+
+##### Transaction
+
+<img width="372" alt="Screenshot 2023-11-27 at 9 54 26 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/ecaaee24-9370-47c1-ae2c-824db35578bd">
+
+<img width="970" alt="Screenshot 2023-11-27 at 9 54 45 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/2196e944-67a3-4f75-bc8c-bdc2baf41c1b">
+
+<img width="532" alt="Screenshot 2023-11-27 at 9 54 53 PM" src="https://github.com/sriharshakappala/wallet/assets/3955701/79521334-a120-4568-b224-394e57082e8d">
+
+##### Refund
+
+##### View Statement
