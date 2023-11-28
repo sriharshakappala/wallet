@@ -1,12 +1,14 @@
-package user
+package transaction
 
 import (
     "fmt"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-
+	"sync"
 	userService "example.com/wallet/services/user"
 )
+
+var mu sync.Mutex
 
 // Function asks for from username, to username and amount & transfers the amount from from username to to username
 func CreateTransaction(db *sql.DB) error {
@@ -35,13 +37,64 @@ func CreateTransaction(db *sql.DB) error {
 		return err
 	}
 
-	err = transferAmount(db, fromUserID, toUserID, amount)
+	// err = transferAmount(db, fromUserID, toUserID, amount)
+	err = transferAmountWithMutexLocking(db, fromUserID, toUserID, amount)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
 	fmt.Println("Transaction successful")
+
+	return nil
+}
+
+func transferAmountWithMutexLocking(db *sql.DB, fromUserID int64, toUserID int64, amount float64) error {
+	mu.Lock()
+	defer mu.Unlock()
+
+	var fromUserBalance float64
+	err := db.QueryRow("SELECT balance FROM wallet WHERE user_id = ?", fromUserID).Scan(&fromUserBalance)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	if fromUserBalance < amount {
+		fmt.Println("Insufficient balance")
+		return nil
+	}
+
+	var toUserBalance float64
+	err = db.QueryRow("SELECT balance FROM wallet WHERE user_id = ?", toUserID).Scan(&toUserBalance)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	_, err = db.Exec("UPDATE wallet SET balance = ? WHERE user_id = ?", fromUserBalance-amount, fromUserID)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	_, err = db.Exec("UPDATE wallet SET balance = ? WHERE user_id = ?", toUserBalance+amount, toUserID)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	_, err = db.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance, other_party_id) VALUES (?, ?, ?, ?, ?)", fromUserID, "Debit", amount, fromUserBalance-amount, toUserID)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	_, err = db.Exec("INSERT INTO transactions (user_id, txn_type, txn_amount, closing_balance, other_party_id) VALUES (?, ?, ?, ?, ?)", toUserID, "Credit", amount, toUserBalance+amount, fromUserID)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 
 	return nil
 }
